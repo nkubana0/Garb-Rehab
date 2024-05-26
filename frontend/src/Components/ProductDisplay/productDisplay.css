@@ -24,7 +24,7 @@
     flex-direction: column;
 }
 .display-right h1 {
-    color: #3d3d3d;
+    color: black;
     font-size: 40px;
     font-weight: 700;
 }
@@ -33,7 +33,7 @@
     align-items: center;
     margin-top: 13px;
     gap: 5px;
-    color: #1c1c1c;
+    color: black;
     font-size: 16px;
 }
 .right-prices {
@@ -44,11 +44,11 @@
     font-weight: 700;
 }
 .right-old-price {
-    color: #818181;
+    color: black;
     text-decoration: line-through;
 }
 .right-new-price {
-    color: #ff4141;
+    color: rgb(220, 85, 55);
 }
 .display-right-size h1 {
     margin-top: 55px;
@@ -74,7 +74,7 @@
     font-size: 16px;
     font-weight: 600;
     color: white;
-    background: #FF4141;
+    background: rgb(220, 85, 55);
     margin-bottom: 40px;
     border: none;
     outline: none;

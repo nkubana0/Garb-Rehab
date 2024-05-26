@@ -1,9 +1,10 @@
 .cartitems {
     margin: 100px 170px;
+    background-color: rgb(216, 215, 210);
 }
 .cartitems hr {
     height: 3px;
-    background: #e2e2e2;
+    background: rgb(220, 85, 55);
     border: 0;
 }
 .format-main {
@@ -55,7 +56,7 @@
     height: 58px;
     outline: none;
     border: none;
-    background: #ff5a5a;
+    background: rgb(220, 85, 55);
     color: #fff;
     font-size: 15px;
     font-weight: 600;

@@ -1,3 +1,9 @@
+.shop-category {
+    padding-top: 100px;
+    background-color: rgb(216, 215, 210);
+    padding-bottom: 1px;
+}
+
 .shopcategory-banner {
     display: block;
     margin: 30px auto;
@@ -14,6 +20,12 @@
     border-radius: 40px;
     border: 1px solid #888;
 }
+
+.shopcategory-sort:hover {
+    color: white;
+    background-color: rgb(220, 85, 55);
+}
+
 .shopcategory-indexSort p span {
     font-weight: 600;
 }
@@ -35,4 +47,9 @@
     color: #787878;
     font-size: 18px;
     font-weight: 500;
+    cursor: pointer;
+}
+.shopcategory-loadmore:hover {
+    color: rgb(216, 215, 210);
+    background-color: rgb(220, 85, 55);
 }

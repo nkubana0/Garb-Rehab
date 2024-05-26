@@ -1,7 +1,7 @@
 .hero {
   height: 100vh;
-  background: linear-gradient(180deg, #fde1ff, #e1ffea22 60%);
   display: flex;
+  background: rgb(216, 215, 210);
 }
 
 .hero-left {
@@ -40,10 +40,11 @@
   height: 70px;
   border-radius: 75px;
   margin-top: 30px;
-  background: #ff4141;
+  background: rgb(220, 85, 55);
   color: white;
   font-size: 23px;
   font-weight: 500;
+  cursor: pointer;
 }
 .hero-right {
   flex: 1;
