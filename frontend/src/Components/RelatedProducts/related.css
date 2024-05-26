@@ -4,9 +4,12 @@
     align-items: center;
     gap: 10px;
     height: 90vh;
+    padding-top: 90px;
+    background-color: rgb(220, 85, 55);
+    margin-bottom: -50px;
 }
 .related h1 {
-    color: #171717;
+    color: black;
     font-size: 50p;
     font-weight: 600;
 }
@@ -14,7 +17,8 @@
     width: 200px;
     height: 6px;
     border-radius: 10px;
-    background: #252525;
+    border: none;
+    background: black;
 }
 .related-item {
     margin-top: 50px;

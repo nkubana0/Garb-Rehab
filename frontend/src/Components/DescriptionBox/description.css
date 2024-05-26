@@ -12,17 +12,18 @@
     font-weight: 600;
     width: 171px;
     height: 70px;
-    border: 1px solid #d0d0d0;
+    border: 1px solid rgb(220, 85, 55);
+    background-color: rgb(220, 85, 55);
 }
 .fade {
-    background: #FBFBFB;
-    color: #555;
+    background: rgb(216, 215, 210);
+    color: black;
 }
 .description {
     display: flex;
     flex-direction: column;
     gap: 25px;
-    border: 1px solid #D0D0D0;
+    border: 1px solid rgb(220, 85, 55);
     padding: 48px;
     padding-bottom: 70px;
 }
