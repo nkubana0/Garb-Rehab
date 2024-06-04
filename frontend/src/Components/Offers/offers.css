@@ -16,17 +16,17 @@
 }
 .offers-left h1 {
     color: rgb(216, 215, 210);
-    font-size: 80px;
+    font-size: 50px;
     font-weight: 600;
 }
 .offers-left p {
     color:rgb(216, 215, 210);
-    font-size: 22px;
+    font-size: 15px;
     font-weight: 600;
 }
 .offers-left button {
-    width: 282px;
-    height: 70px;
+    width: 250px;
+    height: 60px;
     border-radius: 35px;
     background: rgb(220, 85, 55);
     border: none;
@@ -44,5 +44,5 @@
 }
 .offers-right img {
     width: 100%;
-    height: 610px;
+    height: 60vh;
 }
