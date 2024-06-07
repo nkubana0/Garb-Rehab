@@ -78,3 +78,11 @@
     margin-top: 30px;
   }
 }
+@media (max-width: 500px) {
+    .popular {
+        height: 2400px;
+    }
+    .popular-item {
+        flex-direction: column;
+    }
+}

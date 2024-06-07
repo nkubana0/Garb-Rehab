@@ -12,14 +12,17 @@ const Navbar = () => {
   const menuRef = useRef();
 
   const dropDownToggle = (e) => {
-    menuRef.current.classList.toggle('nav-menu-visible');
+    menuRef.current.classList.toggle('nav-menu-responsive-visible');
     e.target.classList.toggle('open');    
   }
 
   return (
+    <>
     <div className="navbar">
       <div className="nav-logo">
-        <img src={logo} alt="" />
+      <Link to="/">
+            <img src={logo} alt="Logo" />
+          </Link>
       </div>
       <img className="nav-drop-down" onClick={dropDownToggle} src={drop_down} alt="" />
       <ul ref={menuRef} className="nav-menu">
@@ -74,6 +77,51 @@ const Navbar = () => {
         <div className="nav-cart-count">{getTotalCartItems()}</div>
       </div>
     </div>
+    <div>
+    <ul ref={menuRef} className="nav-menu-responsive">
+        <li
+          onClick={() => {
+            setMenu("shop");
+          }}
+        >
+          <Link style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }} to="/">
+            Shop
+          </Link>{" "}
+          {menu === "shop" ? <hr /> : <></>}
+        </li>
+        <li
+          onClick={() => {
+            setMenu("mens");
+          }}
+        >
+          <Link style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }} to="/mens">
+            Men
+          </Link>
+          {menu === "mens" ? <hr /> : <></>}
+        </li>
+        <li
+          onClick={() => {
+            setMenu("womens");
+          }}
+        >
+          <Link style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }} to="/womens">
+            Women
+          </Link>{" "}
+          {menu === "womens" ? <hr /> : <></>}
+        </li>
+        <li
+          onClick={() => {
+            setMenu("kids");
+          }}
+        >
+          <Link style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }} to="/kids">
+            Kids
+          </Link>{" "}
+          {menu === "kids" ? <hr /> : <></>}
+        </li>
+      </ul>
+    </div>
+    </>
   );
 };
 

@@ -1,48 +1,83 @@
 .offers {
-    width: 65%;
-    height: 60vh;
-    display: flex;
-    margin: auto;
-    margin-top: 150px;
-    padding: 0px 0px 0px 140px;
-    margin-bottom: 150px;
-    background: black;
+  width: 65%;
+  height: 60vh;
+  display: flex;
+  margin: auto;
+  margin-top: 150px;
+  padding: 0px 0px 0px 140px;
+  margin-bottom: 150px;
+  background: black;
 }
 .offers-left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .offers-left h1 {
-    color: rgb(216, 215, 210);
-    font-size: 50px;
-    font-weight: 600;
+  color: rgb(216, 215, 210);
+  font-size: 50px;
+  font-weight: 600;
 }
 .offers-left p {
-    color:rgb(216, 215, 210);
-    font-size: 15px;
-    font-weight: 600;
+  color: rgb(216, 215, 210);
+  font-size: 15px;
+  font-weight: 600;
 }
 .offers-left button {
-    width: 250px;
-    height: 60px;
-    border-radius: 35px;
-    background: rgb(220, 85, 55);
-    border: none;
-    color: white;
-    font-size: 22px;
-    font-weight: 500;
-    margin-top: 30px;
-    cursor: pointer;
+  width: 250px;
+  height: 60px;
+  border-radius: 35px;
+  background: rgb(220, 85, 55);
+  border: none;
+  color: white;
+  font-size: 22px;
+  font-weight: 500;
+  margin-top: 30px;
+  cursor: pointer;
 }
 .offers-right {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .offers-right img {
-    width: 100%;
-    height: 60vh;
+  width: 100%;
+  height: 60vh;
+}
+@media (max-width: 800px) {
+    .offers {
+        display: flex;
+        width: 90%;
+        padding: 20px;
+    }
+    .offers-right img {
+        width: 100%;
+    }
+  }
+@media (max-width: 500px) {
+  .offers {
+    flex-direction: column;
+    padding: 0px;
+    text-align: center;
+    align-items: center;
+    width: 90%;
+  }
+  .offers-right {
+    display: none;
+  }
+  .offers-left button {
+    margin-left: 20px;
+  }
+  .offers-left h1 {
+    color: rgb(216, 215, 210);
+    font-size: 40px;
+    font-weight: 600;
+  }
+  .offers-left p {
+    color: rgb(216, 215, 210);
+    font-size: 15px;
+    font-weight: 600;
+  }
 }
