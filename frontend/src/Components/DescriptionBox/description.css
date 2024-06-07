@@ -27,3 +27,8 @@
     padding: 48px;
     padding-bottom: 70px;
 }
+@media(max-width: 500px) {
+    .description {
+        margin: 10px;
+    }
+}

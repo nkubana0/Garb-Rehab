@@ -25,3 +25,27 @@
     margin-top: 50px;
     gap: 40px;
 }
+
+@media (max-width: 800px) {
+    .collections {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        margin-top: 50px;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 500px) {
+    .new-collections h1 {
+        font-size: 20px;
+    }
+    .new-collections hr {
+        width: 80px;
+        height: 3px;
+    }
+    .collections {
+        display: flex;
+        flex-direction: column;
+        padding-inline: 20px;
+    }
+}

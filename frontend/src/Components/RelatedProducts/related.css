@@ -25,3 +25,17 @@
     display: flex;
     gap: 30px;
 }
+@media(max-width: 500px) {
+    .related {
+        height: 130vh;
+        padding: 10px;
+    }
+    .related h1 {
+        margin-top: 40px;
+    }
+    .related-item {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+}

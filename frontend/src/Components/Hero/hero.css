@@ -106,15 +106,25 @@
   .hero {
     flex-direction: column;
     padding-inline: 20px;
+    background:
+        linear-gradient(
+          rgba(0, 0, 0, 0.7), 
+          rgba(0, 0, 0, 0.7)
+        ),
+        url('../Assets/hero_image.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
   }
   .hero-right {
     display: none;
   }
   .hero-left h2 {
     font-size: 18px;
+    color: rgb(216, 215, 210);
   }
   .hero-left p {
     font-size: 50px;
+    color: rgb(216, 215, 210);
   }
   .hero-latest-button {
     width: 280px;
