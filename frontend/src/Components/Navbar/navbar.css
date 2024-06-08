@@ -207,8 +207,8 @@
 }
 @media(max-width: 500px) {
     .navbar{
-        padding-inline: 10px;
-        width: 8px 0px;
+        padding-inline: 0px;
+        width: 0px 0px;
         gap: 0;
     }
     .nav-logo img {
@@ -229,5 +229,8 @@
     }
     .nav-login-cart {
         transform: scale(0.8);
+    }
+    .nav-login-cart img {
+      margin-left: -10px;
     }
 }
