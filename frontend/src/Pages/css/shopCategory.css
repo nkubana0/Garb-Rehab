@@ -61,6 +61,30 @@
     color: rgb(216, 215, 210);
     background-color: rgb(220, 85, 55);
 }
+@media(max-width: 1024px) {
+    .shopcategory-products {
+        margin: 20px 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        row-gap: 60px;
+        column-gap: 10px;
+    }
+    .shopcategory-indexSort {
+        display: flex;
+        margin: 0px 20px;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .shopcategory-indexSort p {
+        font-size: smaller;
+    }
+    .shopcategory-sort {
+        font-size: 14px;
+    }
+    .shop-category .dropdown {
+        width: 30px;
+    }
+}
 
 @media(max-width: 500px) {
     .shopcategory-products {
