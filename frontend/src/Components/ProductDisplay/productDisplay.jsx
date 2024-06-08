@@ -14,7 +14,6 @@ const ProductDisplay = (props) => {
           <img src={product.image} alt="" />
           <img src={product.image} alt="" />
           <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
         </div>
         <div className="product-display-image">
           <img className="display-main" src={product.image} alt="" />

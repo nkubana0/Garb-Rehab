@@ -1,6 +1,7 @@
 .navbar {
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
   box-shadow: 0 1px 3px -2px black;
   background-color: black;
@@ -215,10 +216,16 @@
     }
     .nav-drop-down {
       margin-left: 0px;
+      width: 30px;
     }
     .nav-menu-responsive {
       font-size: 15px;
       margin-left: -50px;
+    }
+    .nav-login-cart button {
+      width: 80px;
+      height: 35px;
+      font-size: 14px;
     }
     .nav-login-cart {
         transform: scale(0.8);
