@@ -3,14 +3,16 @@ import "./addproduct.css";
 import upload_area from "../../assets/upload_area.svg";
 
 const AddProduct = () => {
-  const [image, setImage] = useState(false);
-  const [productDetails, setProductDetails] = useState({
+  const initialProductDetails = {
     name: "",
     image: "",
     category: "women",
     new_price: "",
     old_price: "",
-  });
+  };
+
+  const [image, setImage] = useState(false);
+  const [productDetails, setProductDetails] = useState(initialProductDetails);
 
   const imageHandler = (e) => {
     setImage(e.target.files[0]);
@@ -22,6 +24,47 @@ const AddProduct = () => {
 
   const Add_Product = async () => {
     console.log(productDetails);
+    let responseData;
+    let product = productDetails;
+
+    let formData = new FormData();
+    formData.append("product", image);
+
+    await fetch("http://localhost:4000/upload", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: formData,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        responseData = data;
+      });
+
+    if (responseData.success) {
+      product.image = responseData.image_url;
+      console.log(product);
+      await fetch("http://localhost:4000/addproduct", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Product Added");
+            // Reset form and image
+            setProductDetails(initialProductDetails);
+            setImage(false);
+          } else {
+            alert("Failed");
+          }
+        });
+    }
   };
 
   return (
@@ -43,7 +86,7 @@ const AddProduct = () => {
             value={productDetails.old_price}
             onChange={changeHandler}
             type="number"
-            name="old_price" // Changed from "old-price" to "old_price"
+            name="old_price"
             placeholder="Type here!"
           />
         </div>
@@ -53,7 +96,7 @@ const AddProduct = () => {
             value={productDetails.new_price}
             onChange={changeHandler}
             type="number"
-            name="new_price" // Changed from "new-price" to "new_price"
+            name="new_price"
             placeholder="Type here!"
           />
         </div>
