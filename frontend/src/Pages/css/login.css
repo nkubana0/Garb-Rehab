@@ -7,7 +7,6 @@
 }
 .login-container {
     width: 40%;
-    height: 550px;
     background: rgb(220, 85, 55);
     margin: auto;
     padding: 40px 60px;
@@ -52,6 +51,7 @@
 .login-login span {
     color: white;
     font-weight: 600;
+    cursor: pointer;
 }
 .agree {
     display: flex;
