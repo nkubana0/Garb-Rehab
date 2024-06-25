@@ -6,7 +6,7 @@
     width: 100%;
     max-width: 250px;
     height: 100vh;
-    background: white;
+    background: rgb(216, 215, 210);
 }
 .sidebar-item {
     display: flex;
