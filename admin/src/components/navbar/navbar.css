@@ -5,10 +5,20 @@
     padding: 15px 60px;
     box-shadow: 0 1px 3px -2px #000;
     margin-bottom: 1px;
-    background: white;
+    background: black	;
 }
 .nav-logo {
     width: 200px;
+}
+.logo-admin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.logo-admin h1 {
+    font-size: 20px;
+    color: rgb(221,74,44);
 }
 .nav-profile{
     width: 75px;
