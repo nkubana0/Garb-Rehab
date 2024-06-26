@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
+const { log } = require("console");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -197,11 +198,42 @@ app.post("/login", async (req, res) => {
 });
 
 //Creating endpoint for new collection data
-app.get("/newcollections", async (res, req) => {
+app.get("/newcollections", async (req, res) => {
   let products = await Product.find({});
   let new_collections = products.slice(1).slice(-8);
   console.log("New Collection Fetched");
   res.send(new_collections);
+});
+
+//Creating endpoint for popular in women section
+app.get("/popularinwomen", async (req, res) => {
+  let products = await Product.find({ category: "women" });
+  let popular_in_women = products.slice(0, 4);
+  console.log("Popular In Women Fetched");
+  res.send(popular_in_women);
+});
+
+//Creating middleware to fetch user
+const fetchUser = async (req, res) => {
+  const token = req.header("auth-token");
+  if (!token) {
+    res.status(401).send({ errors: "Please authenticate using valid token" });
+  } else {
+    try {
+      const data = jwt.verify(token, "secret_ecom");
+      req.user = data.user;
+      next();
+    } catch (error) {
+      res
+        .status(401)
+        .send({ errors: "Please authenticate using a valid token" });
+    }
+  }
+};
+
+//Creating Endpoint for adding items in Cart
+app.post("/addtocart", fetchUser, async (req, res) => {
+  console.log(req.body, req.user);
 });
 
 app.listen(port, (error) => {
