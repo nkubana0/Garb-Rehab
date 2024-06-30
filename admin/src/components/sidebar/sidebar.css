@@ -6,7 +6,7 @@
     width: 100%;
     max-width: 250px;
     height: 100vh;
-    background: rgb(216, 215, 210);
+    background: black;
 }
 .sidebar-item {
     display: flex;
@@ -19,6 +19,13 @@
     gap: 20px;
     cursor: pointer;
 }
+.sidebar img {
+    width: 50px;
+}
+.sidebar-item p {
+    color: black;
+}
+
 @media(max-width: 800px){
     .sidebar{
         padding: 30px 0px;
