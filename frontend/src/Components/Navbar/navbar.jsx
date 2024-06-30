@@ -24,12 +24,6 @@ const Navbar = () => {
             <img src={logo} alt="Logo" />
           </Link>
         </div>
-        <img
-          className="nav-drop-down"
-          onClick={dropDownToggle}
-          src={drop_down}
-          alt=""
-        />
         <ul ref={menuRef} className="nav-menu">
           <li
             onClick={() => {
@@ -85,6 +79,12 @@ const Navbar = () => {
           </li>
         </ul>
         <div className="nav-login-cart">
+        <img
+          className="nav-drop-down"
+          onClick={dropDownToggle}
+          src={drop_down}
+          alt=""
+        />
           {localStorage.getItem("auth-token") ? (
             <button
               onClick={() => {
