@@ -34,7 +34,7 @@ const Navbar = () => {
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
               to="/"
             >
-              Shop
+              Home
             </Link>{" "}
             {menu === "shop" ? <hr /> : <></>}
           </li>
@@ -47,7 +47,7 @@ const Navbar = () => {
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
               to="/mens"
             >
-              Men
+              Offers
             </Link>
             {menu === "mens" ? <hr /> : <></>}
           </li>
@@ -60,7 +60,7 @@ const Navbar = () => {
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
               to="/womens"
             >
-              Women
+              New
             </Link>{" "}
             {menu === "womens" ? <hr /> : <></>}
           </li>
