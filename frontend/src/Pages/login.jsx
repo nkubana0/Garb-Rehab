@@ -38,7 +38,7 @@ const Login = () => {
   const signup = async () => {
     console.log("Signup Function Executed", formData);
     let responseData;
-    await fetch("http://localhost:4000/signup", {
+    await fetch("https://garb-rehab-backend.onrender.com/signup", {
       method: "POST",
       headers: {
         Accept: "application/form-data",
