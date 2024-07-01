@@ -60,7 +60,7 @@ const Navbar = () => {
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
               to="/womens"
             >
-              New
+              Latest
             </Link>{" "}
             {menu === "womens" ? <hr /> : <></>}
           </li>
