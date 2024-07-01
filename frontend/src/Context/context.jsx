@@ -15,12 +15,12 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState(getDefaultCart());
 
   useEffect(() => {
-    fetch("http://localhost:4000/allproducts")
+    fetch("https://garb-rehab-backend.onrender.com/allproducts")
       .then((response) => response.json())
       .then((data) => setAllProduct(data));
 
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/getcart", {
+      fetch("https://garb-rehab-backend.onrender.com/getcart", {
         method: "POST",
         headers: {
           Accept: "application/form-data",
@@ -37,7 +37,7 @@ const ShopContextProvider = (props) => {
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/addtocart", {
+      fetch("https://garb-rehab-backend.onrender.com/addtocart", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -50,10 +50,11 @@ const ShopContextProvider = (props) => {
         .then((data) => console.log(data));
     }
   };
+
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/removefromcart", {
+      fetch("https://garb-rehab-backend.onrender.com/removefromcart", {
         method: "POST",
         headers: {
           Accept: "application/json",
