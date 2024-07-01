@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./related.css";
-import data_product from "../Assets/data";
 import Item from "../item/item";
 
 const Related = () => {
+  const [relatedProducts, setPopularProducts] = useState([]);
+  useEffect(() => {
+    fetch("https://garb-rehab-backend.onrender.com/popularinwomen")
+      .then((response) => response.json())
+      .then((data) => setPopularProducts(data));
+  }, []);
   return (
     <div className="related">
-      <h1>Related Products</h1>
+      <h1>Recommended Products</h1>
       <hr />
       <div className="related-item">
-        {data_product.map((item, i) => {
+        {relatedProducts.map((item, i) => {
           return (
             <Item
               key={i}

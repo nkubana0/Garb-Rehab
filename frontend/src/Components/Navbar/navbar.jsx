@@ -45,7 +45,7 @@ const Navbar = () => {
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/mens"
+              to="/offers"
             >
               Offers
             </Link>
@@ -53,29 +53,29 @@ const Navbar = () => {
           </li>
           <li
             onClick={() => {
-              setMenu("womens");
+              setMenu("latest");
             }}
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/womens"
+              to="/latest"
             >
               Latest
             </Link>{" "}
-            {menu === "womens" ? <hr /> : <></>}
+            {menu === "latest" ? <hr /> : <></>}
           </li>
           <li
             onClick={() => {
-              setMenu("kids");
+              setMenu("sneakers");
             }}
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/kids"
+              to="/sneakers"
             >
-              Kids
+              Sneakers
             </Link>{" "}
-            {menu === "kids" ? <hr /> : <></>}
+            {menu === "sneakers" ? <hr /> : <></>}
           </li>
         </ul>
         <div className="nav-login-cart">
@@ -116,35 +116,35 @@ const Navbar = () => {
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
               to="/"
             >
-              Shop
+              Home
             </Link>{" "}
             {menu === "shop" ? <hr /> : <></>}
           </li>
           <li
             onClick={() => {
-              setMenu("mens");
+              setMenu("offers");
             }}
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/mens"
+              to="/offers"
             >
-              Men
+              Offers
             </Link>
-            {menu === "mens" ? <hr /> : <></>}
+            {menu === "Offers" ? <hr /> : <></>}
           </li>
           <li
             onClick={() => {
-              setMenu("womens");
+              setMenu("latest");
             }}
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/womens"
+              to="/latest"
             >
-              Women
+              Latest
             </Link>{" "}
-            {menu === "womens" ? <hr /> : <></>}
+            {menu === "Latest" ? <hr /> : <></>}
           </li>
           <li
             onClick={() => {
@@ -153,11 +153,11 @@ const Navbar = () => {
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/kids"
+              to="/sneakers"
             >
-              Kids
+              Sneakers
             </Link>{" "}
-            {menu === "kids" ? <hr /> : <></>}
+            {menu === "Sneakers" ? <hr /> : <></>}
           </li>
         </ul>
       </div>

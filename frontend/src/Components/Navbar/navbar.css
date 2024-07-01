@@ -208,7 +208,9 @@
     }
     .nav-menu-responsive {
       font-size: 15px;
+      font-weight: 500;
       margin-left: -50px;
+      gap: 25px;
     }
     .nav-login-cart button {
       width: 80px;

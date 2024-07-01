@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Navbar from "./Components/Navbar/navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -20,15 +19,15 @@ function App() {
         <Routes>
           <Route path="/" element={<Shop />} />
           <Route
-            path="/mens"
+            path="/offers"
             element={<ShopCategory banner={men_banner} category="men" />}
           />
           <Route
-            path="/womens"
+            path="/latest"
             element={<ShopCategory banner={women_banner} category="women" />}
           />
           <Route
-            path="/kids"
+            path="/sneakers"
             element={<ShopCategory banner={kids_banner} category="kid" />}
           />
           <Route path="/product" element={<Product />} />
