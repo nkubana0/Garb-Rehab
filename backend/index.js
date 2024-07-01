@@ -1,4 +1,3 @@
-require('dotenv').config();
 const port = process.env.PORT || 4000;
 const express = require("express");
 const app = express();
@@ -15,8 +14,7 @@ app.use(cors());
 
 // Database Connection with MongoDB
 mongoose.connect(
-  process.env.MONGODB_URI,
-  { useNewUrlParser: true, useUnifiedTopology: true }
+  "mongodb+srv://nkubana:september@cluster0.cecarkh.mongodb.net/garb-rehab"
 );
 
 //API Creation
@@ -42,7 +40,7 @@ app.use("/images", express.static("upload/images"));
 app.post("/upload", upload.single("product"), (req, res) => {
   res.json({
     success: 1,
-    image_url: `http://localhost:${port}/images/${req.file.filename}`,
+    image_url: `https://garb-rehab-backend.onrender.com/images/${req.file.filename}`,
   });
 });
 
@@ -174,7 +172,7 @@ app.post("/signup", async (req, res) => {
     },
   };
 
-  const token = jwt.sign(data, process.env.JWT_SECRET);
+  const token = jwt.sign(data, "secret_ecom");
   res.json({ success: true, token });
 });
 
@@ -189,7 +187,7 @@ app.post("/login", async (req, res) => {
           id: user.id,
         },
       };
-      const token = jwt.sign(data, process.env.JWT_SECRET);
+      const token = jwt.sign(data, "secret_ecom");
       res.json({ success: true, token });
     } else {
       res.json({ success: false, errors: "Wrong Password" });
@@ -222,7 +220,7 @@ const fetchUser = async (req, res, next) => {
     res.status(401).send({ errors: "Please authenticate using valid token" });
   } else {
     try {
-      const data = jwt.verify(token, process.env.JWT_SECRET);
+      const data = jwt.verify(token, "secret_ecom");
       req.user = data.user;
       next();
     } catch (error) {
