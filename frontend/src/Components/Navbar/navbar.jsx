@@ -47,7 +47,7 @@ const Navbar = () => {
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
               to="/mens"
             >
-              Offers
+              Men
             </Link>
             {menu === "mens" ? <hr /> : <></>}
           </li>
@@ -60,22 +60,22 @@ const Navbar = () => {
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
               to="/womens"
             >
-              Latest
+              Women
             </Link>{" "}
             {menu === "womens" ? <hr /> : <></>}
           </li>
           <li
             onClick={() => {
-              setMenu("kids");
+              setMenu("sneakers");
             }}
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/kids"
+              to="/sneakers"
             >
-              Kids
+              Sneakers
             </Link>{" "}
-            {menu === "kids" ? <hr /> : <></>}
+            {menu === "sneakers" ? <hr /> : <></>}
           </li>
         </ul>
         <div className="nav-login-cart">
@@ -148,16 +148,16 @@ const Navbar = () => {
           </li>
           <li
             onClick={() => {
-              setMenu("kids");
+              setMenu("sneakers");
             }}
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/kids"
+              to="/sneakers"
             >
-              Kids
+              Sneakers
             </Link>{" "}
-            {menu === "kids" ? <hr /> : <></>}
+            {menu === "sneakers" ? <hr /> : <></>}
           </li>
         </ul>
       </div>

@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Navbar from "./Components/Navbar/navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -28,8 +27,8 @@ function App() {
             element={<ShopCategory banner={women_banner} category="women" />}
           />
           <Route
-            path="/kids"
-            element={<ShopCategory banner={kids_banner} category="kid" />}
+            path="/sneakers"
+            element={<ShopCategory banner={kids_banner} category="sneakers" />}
           />
           <Route path="/product" element={<Product />} />
           <Route path="/product/:productId" element={<Product />} />

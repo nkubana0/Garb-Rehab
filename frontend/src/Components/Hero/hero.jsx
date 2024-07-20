@@ -1,7 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./hero.css";
 import arrow_icon from "../Assets/arrow.png";
-import hero_image from "../Assets/hero_image.png";
 
 const Hero = () => {
   return (
@@ -15,13 +15,10 @@ const Hero = () => {
           <p>Collections</p>
           <p>For <span>everyone</span></p>
         </div>
-        <div className="hero-latest-button">
+        <Link to="/mens" className="hero-latest-button" style={{textDecoration : 'none'}}>
           <div>Latest </div>
           <img src={arrow_icon} alt="" />
-        </div>
-      </div>
-      <div className="hero-right">
-        <img src={hero_image} alt="" />
+        </Link>
       </div>
     </div>
   );

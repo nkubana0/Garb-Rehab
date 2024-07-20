@@ -21,7 +21,17 @@
     color: rgb(216, 215, 210);
     font-size: 18px
 }
-.news-letter div {
+.news-letter div form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    width: 100%;
+    height: 70px;
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+}
+.news-letter div{
     display: flex;
     align-items: center;
     justify-content: space-between;

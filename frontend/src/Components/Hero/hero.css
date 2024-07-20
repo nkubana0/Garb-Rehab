@@ -3,7 +3,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(216, 215, 210);
+  background:
+        linear-gradient(
+          rgba(0, 0, 0, 0.7), 
+          rgba(0, 0, 0, 0.7)
+        ),
+        url('../Assets/hero_back.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .hero-left {
@@ -17,12 +24,12 @@
   width: 100%;
 }
 .hero-left h2 {
-  color: #090909;
+  color: rgb(220, 85, 55);
   font-size: 26px;
   font-weight: 600;
 }
 .hero-left p {
-  color: #171717;
+  color: rgb(216, 215, 210);
   font-size: 80px;
   font-weight: 700;
 }
@@ -39,7 +46,7 @@
   justify-content: center;
   align-items: center;
   gap: 15px;
-  width: 100%;
+  width: 60%;
   height: 70px;
   border-radius: 75px;
   margin-top: 30px;

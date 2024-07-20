@@ -1,13 +1,14 @@
-require('dotenv').config();
+require('dotenv').config({ path: 'makefile.env' });
 const port = process.env.PORT || 4000;
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
-const { log } = require("console");
+const axios = require("axios");
+
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -17,7 +18,8 @@ app.use(cors());
 mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true }
-);
+).then(() => console.log("MongoDB connected"))
+  .catch(err => console.log(err));
 
 //API Creation
 app.get("/", (req, res) => {
@@ -263,6 +265,42 @@ app.post("/getcart", fetchUser, async (req, res) => {
   console.log("Get cart");
   let userData = await Users.findOne({ _id: req.user.id });
   res.json(userData.cartData);
+});
+
+// Flutterwave Payment Endpoint
+app.post('/api/pay', async (req, res) => {
+  try {
+    const response = await axios.post('https://api.flutterwave.com/v3/payments', {
+      tx_ref: `trx_${Date.now()}`,
+      amount: req.body.amount,
+      currency: 'USD',
+      redirect_url: 'http://localhost:3000/payment/callback',
+      payment_options: 'card',
+      meta: {
+        consumer_id: 23,
+        consumer_mac: '92a3-912ba-1192a'
+      },
+      customer: {
+        email: req.body.email,
+        phonenumber: '08102909304',
+        name: req.body.name
+      },
+      customizations: {
+        title: 'Payment for items in cart',
+        description: 'Fund of transaction'
+      }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`
+      }
+    });
+
+    const paymentLink = response.data.data.link;
+    res.json({ success: true, paymentLink });
+  } catch (error) {
+    console.error('Error initiating payment:', error.response ? error.response.data : error.message);
+    res.status(500).json({ message: 'Failed to initiate payment' });
+  }
 });
 
 app.listen(port, (error) => {
