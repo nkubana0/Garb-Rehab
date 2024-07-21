@@ -9,11 +9,15 @@ const cors = require("cors");
 const axios = require("axios");
 
 const app = express();
+const allowedOrigins = [
+  'https://garb-rehab.onrender.com',
+  'https://garb-rehab-admin.onrender.com'
+];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: "https://garb-rehab-admin.onrender.com" // Update with your frontend Render URL
+  origin: allowedOrigins // Update with your frontend Render URL
 }));
 
 // Database Connection with MongoDB
