@@ -17,7 +17,7 @@ const allowedOrigins = [
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: allowedOrigins // Update with your frontend Render URL
+  origin: allowedOrigins
 }));
 
 // Database Connection with MongoDB
