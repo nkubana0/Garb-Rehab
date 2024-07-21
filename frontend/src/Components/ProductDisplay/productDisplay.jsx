@@ -6,27 +6,32 @@ import { ShopContext } from "../../Context/context";
 
 const ProductDisplay = (props) => {
   const { product } = props;
-  const {addToCart} = useContext(ShopContext);
+  const { addToCart } = useContext(ShopContext);
+
+  if (!product) {
+    return <div>Loading...</div>; // or any fallback UI
+  }
+
   return (
     <div className="product-display">
       <div className="display-left">
         <div className="display-image-list">
-          <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
+          <img src={product.image} alt="product" />
+          <img src={product.image} alt="product" />
+          <img src={product.image} alt="product" />
         </div>
         <div className="product-display-image">
-          <img className="display-main" src={product.image} alt="" />
+          <img className="display-main" src={product.image} alt="product" />
         </div>
       </div>
       <div className="display-right">
         <h1>{product.name}</h1>
         <div className="display-right-star">
-          <img src={star_icon} alt="" />
-          <img src={star_icon} alt="" />
-          <img src={star_icon} alt="" />
-          <img src={star_icon} alt="" />
-          <img src={star_dull} alt="" />
+          <img src={star_icon} alt="star" />
+          <img src={star_icon} alt="star" />
+          <img src={star_icon} alt="star" />
+          <img src={star_icon} alt="star" />
+          <img src={star_dull} alt="dull star" />
           <p>(122)</p>
         </div>
         <div className="right-prices">
@@ -38,9 +43,13 @@ const ProductDisplay = (props) => {
           hendrerit, nulla ut sollicitudin porta, odio leo vehicula lectus, sit
           amet condimentum ipsum libero id magna.
         </div>
-        <button onClick={()=> {addToCart(product.id)}}>Add To Cart</button>
-        <p className="right-category"><span>Category :</span>Women, Tshirt, Crop-Top</p>
-        <p className="right-category"><span>Tags :</span>Modern, Latest</p>
+        <button onClick={() => addToCart(product.id)}>Add To Cart</button>
+        <p className="right-category">
+          <span>Category :</span> Women, Tshirt, Crop-Top
+        </p>
+        <p className="right-category">
+          <span>Tags :</span> Modern, Latest
+        </p>
       </div>
     </div>
   );
