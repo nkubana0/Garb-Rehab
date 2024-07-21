@@ -39,9 +39,10 @@ const ProductDisplay = (props) => {
           <div className="right-new-price">${product.new_price}</div>
         </div>
         <div className="right-description">
-          Lore Epsom dolor sit amet, consectetur adipiscing elit. Fusce
-          hendrerit, nulla ut sollicitudin porta, odio leo vehicula lectus, sit
-          amet condimentum ipsum libero id magna.
+          Dress to impress or, at the very least, to distract from the fact that
+          you are an emotional rollercoaster in human form. Our clothes might not
+          fix your problems, but they will definitely make you look like you are
+          handling them with style."
         </div>
         <button onClick={() => addToCart(product.id)}>Add To Cart</button>
         <p className="right-category">
