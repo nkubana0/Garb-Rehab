@@ -38,16 +38,6 @@ const ProductDisplay = (props) => {
           hendrerit, nulla ut sollicitudin porta, odio leo vehicula lectus, sit
           amet condimentum ipsum libero id magna.
         </div>
-        <div className="display-right-size">
-            <h1>Select Size</h1>
-            <div className="right-size">
-                <div>S</div>
-                <div>M</div>
-                <div>L</div>
-                <div>XL</div>
-                <div>XXL</div>
-            </div>
-        </div>
         <button onClick={()=> {addToCart(product.id)}}>Add To Cart</button>
         <p className="right-category"><span>Category :</span>Women, Tshirt, Crop-Top</p>
         <p className="right-category"><span>Tags :</span>Modern, Latest</p>
