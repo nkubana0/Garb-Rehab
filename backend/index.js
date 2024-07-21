@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: "https://garb-rehab.onrender.com" // Update with your frontend Render URL
+  origin: "https://garb-rehab-admin.onrender.com" // Update with your frontend Render URL
 }));
 
 // Database Connection with MongoDB
