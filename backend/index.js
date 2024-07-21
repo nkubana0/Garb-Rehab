@@ -12,7 +12,9 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: "https://garb-rehab.onrender.com" // Update with your frontend Render URL
+}));
 
 // Database Connection with MongoDB
 mongoose.connect(
@@ -44,7 +46,7 @@ app.use("/images", express.static("upload/images"));
 app.post("/upload", upload.single("product"), (req, res) => {
   res.json({
     success: 1,
-    image_url: `http://localhost:${port}/images/${req.file.filename}`,
+    image_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`, // Use dynamic URL
   });
 });
 
@@ -273,16 +275,16 @@ app.post('/api/pay', async (req, res) => {
     const response = await axios.post('https://api.flutterwave.com/v3/payments', {
       tx_ref: `trx_${Date.now()}`,
       amount: req.body.amount,
-      currency: 'USD',
-      redirect_url: 'http://localhost:3000/payment/callback',
-      payment_options: 'card',
+      currency: 'RWF', // Use Rwandan Franc
+      redirect_url: `${req.protocol}://${req.get('host')}/payment/callback`, // Use dynamic URL
+      payment_options: 'card,banktransfer,ussd,barter,paga,mobilemoney,bank_transfer,account,mpesa',
       meta: {
         consumer_id: 23,
         consumer_mac: '92a3-912ba-1192a'
       },
       customer: {
         email: req.body.email,
-        phonenumber: '08102909304',
+        phonenumber: req.body.phonenumber, // Use the phone number from request
         name: req.body.name
       },
       customizations: {
