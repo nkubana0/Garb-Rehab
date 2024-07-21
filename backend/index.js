@@ -20,19 +20,16 @@ app.use(cors({
   origin: allowedOrigins
 }));
 
-// Database Connection with MongoDB
 mongoose.connect(
   process.env.MONGODB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true }
 ).then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
-//API Creation
 app.get("/", (req, res) => {
   res.send("Express App is Running");
 });
 
-// Image Storage Engine
 const storage = multer.diskStorage({
   destination: "./upload/images",
   filename: (req, file, cb) => {
@@ -45,16 +42,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-//Creating upload endpoint for Images
 app.use("/images", express.static("upload/images"));
 app.post("/upload", upload.single("product"), (req, res) => {
+  const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
   res.json({
     success: 1,
-    image_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`, // Use dynamic URL
+    image_url: `${baseUrl}/images/${req.file.filename}`, // Use dynamic URL
   });
 });
 
-// Schema for creating Products
 const Product = mongoose.model("Product", {
   id: {
     type: Number,
@@ -117,7 +113,6 @@ app.post("/addproduct", async (req, res) => {
   });
 });
 
-//Creating Api for Deleting Prods
 app.post("/removeproduct", async (req, res) => {
   await Product.findOneAndDelete({ id: req.body.id });
   console.log("Removed");
@@ -127,14 +122,12 @@ app.post("/removeproduct", async (req, res) => {
   });
 });
 
-// Creating API For Getting All Products
 app.get("/allproducts", async (req, res) => {
   let products = await Product.find({});
   console.log("All Products Fetched");
   res.send(products);
 });
 
-// Schema creating for User model
 const Users = mongoose.model("Users", {
   name: {
     type: String,
@@ -155,7 +148,6 @@ const Users = mongoose.model("Users", {
   },
 });
 
-// Creating Endpoint for registering the User
 app.post("/signup", async (req, res) => {
   let check = await Users.findOne({ email: req.body.email });
   if (check) {
@@ -186,7 +178,6 @@ app.post("/signup", async (req, res) => {
   res.json({ success: true, token });
 });
 
-// creating end point for user login
 app.post("/login", async (req, res) => {
   let user = await Users.findOne({ email: req.body.email });
   if (user) {
@@ -207,7 +198,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-//Creating endpoint for new collection data
 app.get("/newcollections", async (req, res) => {
   let products = await Product.find({});
   let new_collections = products.slice(1).slice(-8);
@@ -215,7 +205,6 @@ app.get("/newcollections", async (req, res) => {
   res.send(new_collections);
 });
 
-//Creating endpoint for popular in women section
 app.get("/popularinwomen", async (req, res) => {
   let products = await Product.find({ category: "women" });
   let popular_in_women = products.slice(0, 4);
@@ -223,7 +212,6 @@ app.get("/popularinwomen", async (req, res) => {
   res.send(popular_in_women);
 });
 
-//Creating middleware to fetch user
 const fetchUser = async (req, res, next) => {
   const token = req.header("auth-token");
   if (!token) {
@@ -241,7 +229,6 @@ const fetchUser = async (req, res, next) => {
   }
 };
 
-//Creating Endpoint for adding items in Cart
 app.post("/addtocart", fetchUser, async (req, res) => {
   console.log("Added", req.body.itemId);
   let userData = await Users.findOne({ _id: req.user.id });
@@ -253,7 +240,6 @@ app.post("/addtocart", fetchUser, async (req, res) => {
   res.send("Added");
 });
 
-//Creating endpoint to remove product from cartdata
 app.post("/removefromcart", fetchUser, async (req, res) => {
   console.log("removed", req.body.itemId);
   let userData = await Users.findOne({ _id: req.user.id });
@@ -266,21 +252,20 @@ app.post("/removefromcart", fetchUser, async (req, res) => {
   res.send("Removed");
 });
 
-// creating endpoint to get cartData
 app.post("/getcart", fetchUser, async (req, res) => {
   console.log("Get cart");
   let userData = await Users.findOne({ _id: req.user.id });
   res.json(userData.cartData);
 });
 
-// Flutterwave Payment Endpoint
 app.post('/api/pay', async (req, res) => {
   try {
+    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
     const response = await axios.post('https://api.flutterwave.com/v3/payments', {
       tx_ref: `trx_${Date.now()}`,
       amount: req.body.amount,
       currency: 'RWF', // Use Rwandan Franc
-      redirect_url: `${req.protocol}://${req.get('host')}/payment/callback`, // Use dynamic URL
+      redirect_url: `${baseUrl}/payment/callback`, // Use dynamic URL
       payment_options: 'card,banktransfer,ussd,barter,paga,mobilemoney,bank_transfer,account,mpesa',
       meta: {
         consumer_id: 23,
