@@ -96,7 +96,7 @@
         flex-direction: column;
     }
     .display-image-list {
-        margin: 0px 70px;
+        display: none;
     }
     .display-main {
         padding-bottom: 50px;
@@ -117,7 +117,7 @@
     .display-image-list {
         margin: 0px;
         padding: 0px;
-        display: flex;
+        display: none;
         align-items: center;
         flex-direction: row;
         justify-content: center;
@@ -153,7 +153,7 @@
     .display-image-list {
         margin: 0px -10px;
         padding: 10px;
-        display: flex;
+        display: none;
         align-items: center;
         flex-direction: row;
         justify-content: center;
