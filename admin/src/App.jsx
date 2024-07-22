@@ -1,14 +1,17 @@
-import React from 'react'
-import Navbar from './components/navbar/navbar'
-import Admin from './pages/admin/admin'
+import React from "react";
+import Navbar from "./components/navbar/navbar";
+import Admin from "./pages/admin/admin";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   return (
     <div>
-      <Navbar />
-      <Admin />
+      <AuthProvider>
+        <Navbar />
+        <Admin />
+      </AuthProvider>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

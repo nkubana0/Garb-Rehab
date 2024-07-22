@@ -16,9 +16,10 @@ const allowedOrigins = [
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
+/**app.use(cors({
   origin: allowedOrigins
-}));
+}));**/
+app.use(cors());
 
 mongoose.connect(
   process.env.MONGODB_URI,
