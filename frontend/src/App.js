@@ -6,6 +6,7 @@ import ShopCategory from "./Pages/shopCategory";
 import Product from "./Pages/product";
 import Cart from "./Pages/cart";
 import Login from "./Pages/login";
+import ForgotPassword from "./Pages/forgotPassword"; // Import the ForgotPassword component
 import Footer from "./Components/footer/footer";
 import men_banner from "./Components/Assets/banner_mens.png";
 import women_banner from "./Components/Assets/banner_women.png";
@@ -32,9 +33,9 @@ function App() {
           />
           <Route path="/product" element={<Product />} />
           <Route path="/product/:productId" element={<Product />} />
-          <Route />
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
         <Footer />
       </BrowserRouter>

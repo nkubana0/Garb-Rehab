@@ -125,7 +125,8 @@
         padding-bottom: 70px;
     }
     .display-main {
-        margin: 0px 140px;
+        width: 90%;
+        margin: 0px 40px;
     }
     .right-size div {
         padding: 20px;
@@ -167,7 +168,7 @@
     }
     .display-main {
         width: 100%;
-        height: 450px;
+        height: 350px;
         padding: 0px;
         margin: 0px;
     }

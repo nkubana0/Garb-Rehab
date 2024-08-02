@@ -8,6 +8,8 @@ const path = require("path");
 const cors = require("cors");
 const axios = require("axios");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { sendEmail } = require('./utils/email'); // Import email utility
+const { generateOTP, verifyOTP } = require('./utils/otp'); // Import OTP utility
 
 const app = express();
 
@@ -55,10 +57,10 @@ app.post("/upload", upload.single("product"), async (req, res) => {
 
   try {
     const command = new PutObjectCommand(uploadParams);
-    const data = await s3Client.send(command);
+    await s3Client.send(command);
     res.json({
       success: 1,
-      image_url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${uploadParams.Key}`, // S3 file URL
+      image_url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${uploadParams.Key}`,
     });
   } catch (err) {
     console.error("Error uploading to S3:", err);
@@ -76,6 +78,18 @@ const Product = mongoose.model("Product", {
   old_price: { type: Number, required: true },
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
+});
+
+// MongoDB schema and models for Users
+const Users = mongoose.model("Users", {
+  name: { type: String },
+  email: { type: String, unique: true },
+  password: { type: String },
+  cartData: { type: Object },
+  date: { type: Date, default: Date.now },
+  verified: { type: Boolean, default: false },
+  otp: { type: String, required: false },
+  otpExpiration: { type: Date, required: false },
 });
 
 // Route for adding a product
@@ -108,16 +122,7 @@ app.get("/allproducts", async (req, res) => {
   res.send(products);
 });
 
-// MongoDB schema and models for Users
-const Users = mongoose.model("Users", {
-  name: { type: String },
-  email: { type: String, unique: true },
-  password: { type: String },
-  cartData: { type: Object },
-  date: { type: Date, default: Date.now },
-});
-
-// Route for user signup
+// Route for user signup with email verification
 app.post("/signup", async (req, res) => {
   let check = await Users.findOne({ email: req.body.email });
   if (check) {
@@ -126,22 +131,46 @@ app.post("/signup", async (req, res) => {
       errors: "Existing user found with same email address",
     });
   }
-  
+
   const cart = {};
   for (let i = 0; i < 300; i++) {
     cart[i] = 0;
   }
+
+  const otp = generateOTP();
+  const otpExpiration = new Date();
+  otpExpiration.setMinutes(otpExpiration.getMinutes() + 10); // OTP expires in 10 minutes
 
   const user = new Users({
     name: req.body.username,
     email: req.body.email,
     password: req.body.password,
     cartData: cart,
+    otp,
+    otpExpiration,
   });
+
+  await user.save();
+  sendEmail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
+
+  res.json({ success: true, message: "OTP sent to email. Please verify." });
+});
+
+// Route for verifying OTP
+app.post("/verify", async (req, res) => {
+  const { email, otp } = req.body;
+  const user = await Users.findOne({ email });
+
+  if (!user || !verifyOTP(otp, user.otp, user.otpExpiration)) {
+    return res.status(400).json({ success: false, errors: "Invalid OTP" });
+  }
+
+  user.verified = true;
+  user.otp = undefined;
+  user.otpExpiration = undefined;
   await user.save();
 
-  const data = { user: { id: user.id } };
-  const token = jwt.sign(data, process.env.JWT_SECRET);
+  const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET);
   res.json({ success: true, token });
 });
 
@@ -149,12 +178,53 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   let user = await Users.findOne({ email: req.body.email });
   if (user && req.body.password === user.password) {
-    const data = { user: { id: user.id } };
-    const token = jwt.sign(data, process.env.JWT_SECRET);
+    if (!user.verified) {
+      return res.status(401).json({ success: false, errors: "Please verify your email." });
+    }
+
+    const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET);
     res.json({ success: true, token });
   } else {
     res.json({ success: false, errors: "Invalid credentials" });
   }
+});
+
+// Route for password reset request
+app.post("/password-reset-request", async (req, res) => {
+  const { email } = req.body;
+  const user = await Users.findOne({ email });
+
+  if (!user) {
+    return res.status(400).json({ success: false, errors: "User not found." });
+  }
+
+  const otp = generateOTP();
+  const otpExpiration = new Date();
+  otpExpiration.setMinutes(otpExpiration.getMinutes() + 10); // OTP expires in 10 minutes
+
+  user.otp = otp;
+  user.otpExpiration = otpExpiration;
+  await user.save();
+
+  sendEmail(email, "Password Reset Request", `Your OTP is: ${otp}`);
+  res.json({ success: true, message: "OTP sent to email." });
+});
+
+// Route for resetting password
+app.post("/reset-password", async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  const user = await Users.findOne({ email });
+
+  if (!user || !verifyOTP(otp, user.otp, user.otpExpiration)) {
+    return res.status(400).json({ success: false, errors: "Invalid OTP" });
+  }
+
+  user.password = newPassword;
+  user.otp = undefined;
+  user.otpExpiration = undefined;
+  await user.save();
+
+  res.json({ success: true, message: "Password reset successfully." });
 });
 
 // Route for new collections

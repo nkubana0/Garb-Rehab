@@ -1,5 +1,7 @@
 .description {
+    display: none;
     margin: 120px 170px;
+    background-color: aqua;
 }
 .navigator {
     display: flex;
@@ -29,17 +31,20 @@
 }
 @media(max-width: 1300px) {
     .description {
+        display: none;
         margin: 10px;
         margin-top: 50px;
     }
 }
 @media(max-width: 1000px) {
     .description {
+        display: none;
         margin: 70px;
     }
 }
 @media(max-width: 500px) {
     .description {
+        display: none;
         margin: 10px;
     }
 }
