@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "makefile.env" });
+require('dotenv').config();
 const port = process.env.PORT || 4000;
 const express = require("express");
 const mongoose = require("mongoose");
@@ -7,7 +7,7 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios");
-const AWS = require("aws-sdk");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 const app = express();
 
@@ -15,6 +15,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+// AWS S3 Configuration
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 // MongoDB connection
 mongoose
@@ -30,15 +39,8 @@ app.get("/", (req, res) => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Configure AWS S3
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
-
 // Route for uploading files to S3
-app.post("/upload", upload.single("product"), (req, res) => {
+app.post("/upload", upload.single("product"), async (req, res) => {
   const file = req.file;
   if (!file) {
     return res.status(400).json({ success: 0, message: "No file uploaded" });
@@ -52,17 +54,17 @@ app.post("/upload", upload.single("product"), (req, res) => {
     ACL: "public-read", // Make the file publicly accessible
   };
 
-  s3.upload(uploadParams, (err, data) => {
-    if (err) {
-      console.error("Error uploading to S3:", err);
-      return res.status(500).json({ success: 0, message: "Failed to upload" });
-    }
-
+  try {
+    const command = new PutObjectCommand(uploadParams);
+    const data = await s3Client.send(command);
     res.json({
       success: 1,
-      image_url: data.Location, // S3 file URL
+      image_url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${uploadParams.Key}`, // S3 file URL
     });
-  });
+  } catch (err) {
+    console.error("Error uploading to S3:", err);
+    return res.status(500).json({ success: 0, message: "Failed to upload" });
+  }
 });
 
 // MongoDB schema and models
