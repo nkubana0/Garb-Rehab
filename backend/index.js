@@ -1,4 +1,4 @@
-require('dotenv').config({ path: 'makefile.env' });
+require("dotenv").config({ path: "makefile.env" });
 const port = process.env.PORT || 4000;
 const express = require("express");
 const mongoose = require("mongoose");
@@ -10,22 +10,23 @@ const axios = require("axios");
 
 const app = express();
 const allowedOrigins = [
-  'https://garb-rehab.onrender.com',
-  'https://garb-rehab-admin.onrender.com'
+  "https://garb-rehab.onrender.com",
+  "https://garb-rehab-admin.onrender.com",
 ];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: allowedOrigins
-}));
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
 app.use(cors());
 
-mongoose.connect(
-  process.env.MONGODB_URI,
-  { useNewUrlParser: true, useUnifiedTopology: true }
-).then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
+mongoose
+  .connect(process.env.MONGODB_URI, { useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
 
 app.get("/", (req, res) => {
   res.send("Express App is Running");
@@ -45,7 +46,8 @@ const upload = multer({ storage: storage });
 
 app.use("/images", express.static("upload/images"));
 app.post("/upload", upload.single("product"), (req, res) => {
-  const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+  const baseUrl =
+    process.env.BASE_URL || `${req.protocol}://${req.get("host")}`;
   res.json({
     success: 1,
     image_url: `${baseUrl}/images/${req.file.filename}`, // Use dynamic URL
@@ -259,39 +261,48 @@ app.post("/getcart", fetchUser, async (req, res) => {
   res.json(userData.cartData);
 });
 
-app.post('/api/pay', async (req, res) => {
+app.post("/api/pay", async (req, res) => {
   try {
-    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
-    const response = await axios.post('https://api.flutterwave.com/v3/payments', {
-      tx_ref: `trx_${Date.now()}`,
-      amount: req.body.amount,
-      currency: 'RWF', // Use Rwandan Franc
-      redirect_url: `${baseUrl}/payment/callback`, // Use dynamic URL
-      payment_options: 'card,banktransfer,ussd,barter,paga,mobilemoney,bank_transfer,account,mpesa',
-      meta: {
-        consumer_id: 23,
-        consumer_mac: '92a3-912ba-1192a'
+    const baseUrl =
+      process.env.BASE_URL || `${req.protocol}://${req.get("host")}`;
+    const response = await axios.post(
+      "https://api.flutterwave.com/v3/payments",
+      {
+        tx_ref: `trx_${Date.now()}`,
+        amount: req.body.amount,
+        currency: "RWF", // Use Rwandan Franc
+        redirect_url: `${baseUrl}/payment/callback`, // Use dynamic URL
+        payment_options:
+          "card,banktransfer,ussd,barter,paga,mobilemoney,bank_transfer,account,mpesa",
+        meta: {
+          consumer_id: 23,
+          consumer_mac: "92a3-912ba-1192a",
+        },
+        customer: {
+          email: req.body.email,
+          phonenumber: req.body.phonenumber, // Use the phone number from request
+          name: req.body.name,
+        },
+        customizations: {
+          title: "Payment for items in cart",
+          description: "Fund of transaction",
+        },
       },
-      customer: {
-        email: req.body.email,
-        phonenumber: req.body.phonenumber, // Use the phone number from request
-        name: req.body.name
-      },
-      customizations: {
-        title: 'Payment for items in cart',
-        description: 'Fund of transaction'
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
+        },
       }
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`
-      }
-    });
+    );
 
     const paymentLink = response.data.data.link;
     res.json({ success: true, paymentLink });
   } catch (error) {
-    console.error('Error initiating payment:', error.response ? error.response.data : error.message);
-    res.status(500).json({ message: 'Failed to initiate payment' });
+    console.error(
+      "Error initiating payment:",
+      error.response ? error.response.data : error.message
+    );
+    res.status(500).json({ message: "Failed to initiate payment" });
   }
 });
 
