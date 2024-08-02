@@ -9,21 +9,13 @@ const cors = require("cors");
 const axios = require("axios");
 
 const app = express();
-const allowedOrigins = [
-  "https://garb-rehab.onrender.com",
-  "https://garb-rehab-admin.onrender.com",
-];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: allowedOrigins, // Specify allowed origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-}));
+app.use(cors());
 
 mongoose
-  .connect(process.env.MONGODB_URI,)
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
