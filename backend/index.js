@@ -51,7 +51,6 @@ app.post("/upload", upload.single("product"), async (req, res) => {
     Key: `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`,
     Body: file.buffer,
     ContentType: file.mimetype,
-    ACL: "public-read", // Make the file publicly accessible
   };
 
   try {
