@@ -7,6 +7,7 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios");
+const AWS = require("aws-sdk");
 
 const app = express();
 
@@ -14,7 +15,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
 
 // MongoDB connection
 mongoose
@@ -29,6 +29,13 @@ app.get("/", (req, res) => {
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+// Configure AWS S3
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
 
 // Route for uploading files to S3
 app.post("/upload", upload.single("product"), (req, res) => {
