@@ -66,16 +66,16 @@ const Navbar = () => {
           </li>
           <li
             onClick={() => {
-              setMenu("sneakers");
+              setMenu("kids");
             }}
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/sneakers"
+              to="/kids"
             >
-              Sneakers
+              Kids
             </Link>{" "}
-            {menu === "sneakers" ? <hr /> : <></>}
+            {menu === "kids" ? <hr /> : <></>}
           </li>
         </ul>
         <div className="nav-login-cart">
@@ -148,16 +148,16 @@ const Navbar = () => {
           </li>
           <li
             onClick={() => {
-              setMenu("sneakers");
+              setMenu("kids");
             }}
           >
             <Link
               style={{ textDecoration: "none", color: "rgb(216, 215, 210)" }}
-              to="/sneakers"
+              to="/kids"
             >
-              Sneakers
+              Kids
             </Link>{" "}
-            {menu === "sneakers" ? <hr /> : <></>}
+            {menu === "Kids" ? <hr /> : <></>}
           </li>
         </ul>
       </div>
