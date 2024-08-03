@@ -11,8 +11,6 @@
 5. [Running the Application](#running-the-application)
 6. [Environment Variables](#environment-variables)
 7. [Important Note on Local Development](#important-note-on-local-development)
-8. [Contributing](#contributing)
-9. [License](#license)
 
 ## Features
 - **User registration and authentication**
