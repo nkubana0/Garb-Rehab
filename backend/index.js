@@ -226,18 +226,27 @@ app.post("/password-reset-request", async (req, res) => {
 // Route for resetting password
 app.post("/reset-password", async (req, res) => {
   const { email, otp, newPassword } = req.body;
-  const user = await Users.findOne({ email });
+  try {
+    const user = await Users.findOne({ email });
 
-  if (!user || !verifyOTP(otp, user.otp, user.otpExpiration)) {
-    return res.status(400).json({ success: false, errors: "Invalid OTP" });
+    if (!user) {
+      return res.status(400).json({ success: false, errors: "User not found." });
+    }
+
+    if (!verifyOTP(otp, user.otp, user.otpExpiration)) {
+      return res.status(400).json({ success: false, errors: "Invalid OTP" });
+    }
+
+    user.password = newPassword;
+    user.otp = undefined;
+    user.otpExpiration = undefined;
+    await user.save();
+
+    res.json({ success: true, message: "Password reset successfully." });
+  } catch (error) {
+    console.error('Error during password reset:', error);
+    res.status(500).json({ success: false, errors: "Internal server error" });
   }
-
-  user.password = newPassword;
-  user.otp = undefined;
-  user.otpExpiration = undefined;
-  await user.save();
-
-  res.json({ success: true, message: "Password reset successfully." });
 });
 
 // Route for new collections

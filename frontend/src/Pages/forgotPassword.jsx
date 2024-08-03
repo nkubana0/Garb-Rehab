@@ -3,6 +3,8 @@ import "./css/forgotPassword.css";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setEmail(e.target.value);
@@ -10,8 +12,9 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Forgot Password Function Executed", email);
-  
+    setLoading(true);
+    setError(""); // Reset error state
+
     try {
       const response = await fetch("https://garb-rehab-backend.onrender.com/password-reset-request", {
         method: "POST",
@@ -21,25 +24,25 @@ const ForgotPassword = () => {
         },
         body: JSON.stringify({ email }),
       });
-  
+
       if (!response.ok) {
-        // Handle non-200 HTTP responses
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const responseData = await response.json();
-  
+
       if (responseData.success) {
         alert("Password reset link has been sent to your email.");
       } else {
-        alert(responseData.errors);
+        setError(responseData.errors || "An error occurred. Please try again.");
       }
     } catch (error) {
       console.error("Error during password reset request:", error);
-      alert("An error occurred while requesting a password reset. Please try again later.");
+      setError("An error occurred while requesting a password reset. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   return (
     <div className="forgot-password">
@@ -52,9 +55,13 @@ const ForgotPassword = () => {
             onChange={handleChange}
             type="email"
             placeholder="Enter your email"
+            required
           />
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
+          </button>
         </form>
+        {error && <p className="error-message">{error}</p>}
       </div>
     </div>
   );

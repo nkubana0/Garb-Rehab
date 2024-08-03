@@ -1,4 +1,3 @@
-require('dotenv').config();
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
 
@@ -18,7 +17,7 @@ async function sendMail(to, subject, text) {
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: process.env.EMAIL_USER,  // Ensure this is correct
+        user: process.env.EMAIL_USER,
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         refreshToken: process.env.REFRESH_TOKEN,
@@ -27,14 +26,13 @@ async function sendMail(to, subject, text) {
     });
 
     const mailOptions = {
-      from: `Ivan Shema <${process.env.EMAIL_USER}>`,
+      from: `Garb Rehab <${process.env.EMAIL_USER}>`,
       to: to,
       subject: subject,
       text: text,
     };
 
-    const result = await transport.sendMail(mailOptions);
-    return result;
+    await transport.sendMail(mailOptions);
   } catch (error) {
     console.error('Error sending email:', error);
     throw new Error('Failed to send email');

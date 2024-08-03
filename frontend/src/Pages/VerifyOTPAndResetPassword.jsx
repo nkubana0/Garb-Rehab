@@ -5,22 +5,30 @@ const VerifyOTPAndResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
 
   const resetPassword = async () => {
-    let responseData;
-    await fetch("https://garb-rehab-backend.onrender.com/reset-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ otp, newPassword }),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
+    try {
+      const response = await fetch("https://garb-rehab-backend.onrender.com/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ otp, newPassword }),
+      });
 
-    if (responseData.success) {
-      alert("Password has been reset successfully.");
-      window.location.replace("/login");
-    } else {
-      alert(responseData.errors);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+
+      if (responseData.success) {
+        alert("Password has been reset successfully.");
+        window.location.replace("/login");
+      } else {
+        alert(responseData.errors);
+      }
+    } catch (error) {
+      console.error("Error during password reset:", error);
+      alert("An error occurred while resetting the password. Please try again later.");
     }
   };
 
