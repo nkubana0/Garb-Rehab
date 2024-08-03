@@ -73,15 +73,15 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT_URI=https://yourdomain.com/auth/google/callback
 ```
 2. Starting the servers.
-   Backend
+- Backend
 ```bash
 node ./index.js
 ```
-Frontend
+- Frontend
 ```bash
 npm start
 ```
-Admin
+- Admin
 ```bash
 npm run dev
 ```
