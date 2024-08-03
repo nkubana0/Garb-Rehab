@@ -18,7 +18,7 @@ async function sendMail(to, subject, text) {
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: 'garbrehab@gmail.com',
+        user: process.env.EMAIL_USER,  // Ensure this is correct
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         refreshToken: process.env.REFRESH_TOKEN,
@@ -27,7 +27,7 @@ async function sendMail(to, subject, text) {
     });
 
     const mailOptions = {
-      from: 'Ivan Shema <garbrehab@gmail.com>',
+      from: `Ivan Shema <${process.env.EMAIL_USER}>`,
       to: to,
       subject: subject,
       text: text,
