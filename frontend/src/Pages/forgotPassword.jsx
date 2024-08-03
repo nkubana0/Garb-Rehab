@@ -11,24 +11,35 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Forgot Password Function Executed", email);
-    let responseData;
-    await fetch("https://garb-rehab-backend.onrender.com/password-reset-request", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-
-    if (responseData.success) {
-      alert("Password reset link has been sent to your email.");
-    } else {
-      alert(responseData.errors);
+  
+    try {
+      const response = await fetch("https://garb-rehab-backend.onrender.com/password-reset-request", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+  
+      if (!response.ok) {
+        // Handle non-200 HTTP responses
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const responseData = await response.json();
+  
+      if (responseData.success) {
+        alert("Password reset link has been sent to your email.");
+      } else {
+        alert(responseData.errors);
+      }
+    } catch (error) {
+      console.error("Error during password reset request:", error);
+      alert("An error occurred while requesting a password reset. Please try again later.");
     }
   };
+  
 
   return (
     <div className="forgot-password">
