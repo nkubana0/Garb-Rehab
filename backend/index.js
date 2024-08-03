@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
-const axios = require("axios");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { sendMail } = require('./email'); // Import email utility
 const { generateOTP, verifyOTP } = require('./utils/otp'); // Import OTP utility
