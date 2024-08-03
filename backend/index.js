@@ -268,6 +268,42 @@ app.get("/popularinchildren", async (req, res) => {
   res.send(popular_in_children);
 });
 
+// Route to handle OAuth2 callback and exchange code for tokens
+app.post('/auth/callback', async (req, res) => {
+  const { code } = req.body;
+
+  if (!code) {
+    return res.status(400).json({ success: false, message: 'Authorization code is required' });
+  }
+
+  try {
+    // Exchange the authorization code for an access token
+    const response = await axios.post('https://oauth2.googleapis.com/token', null, {
+      params: {
+        code: code,
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        redirect_uri: process.env.REDIRECT_URI,
+        grant_type: 'authorization_code',
+      },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+    const { access_token, refresh_token } = response.data;
+
+    // Save tokens and user info as needed
+    // Example: save tokens to the database or session
+
+    res.json({ success: true, access_token, refresh_token });
+  } catch (error) {
+    console.error('Error exchanging code for tokens:', error);
+    res.status(500).json({ success: false, message: 'Failed to exchange authorization code for tokens' });
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
