@@ -1,5 +1,4 @@
 require('dotenv').config();
-const port = process.env.PORT || 4000;
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
@@ -8,9 +7,10 @@ const path = require("path");
 const cors = require("cors");
 const axios = require("axios");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const { sendEmail } = require('./utils/email'); // Import email utility
+const { sendMail } = require('./email'); // Import email utility
 const { generateOTP, verifyOTP } = require('./utils/otp'); // Import OTP utility
 
+const port = process.env.PORT || 4000;
 const app = express();
 
 // Middleware setup
@@ -155,9 +155,14 @@ app.post("/signup", async (req, res) => {
   });
 
   await user.save();
-  sendEmail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
 
-  res.json({ success: true, message: "OTP sent to email. Please verify." });
+  // Send email with OTP
+  try {
+    await sendMail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
+    res.json({ success: true, message: "OTP sent to email. Please verify." });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to send OTP email." });
+  }
 });
 
 // Route for verifying OTP
@@ -210,8 +215,13 @@ app.post("/password-reset-request", async (req, res) => {
   user.otpExpiration = otpExpiration;
   await user.save();
 
-  sendEmail(email, "Password Reset Request", `Your OTP is: ${otp}`);
-  res.json({ success: true, message: "OTP sent to email." });
+  // Send email with OTP for password reset
+  try {
+    await sendMail(email, "Password Reset Request", `Your OTP is: ${otp}`);
+    res.json({ success: true, message: "OTP sent to email." });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to send OTP email." });
+  }
 });
 
 // Route for resetting password
@@ -245,95 +255,20 @@ app.get("/popularinwomen", async (req, res) => {
   res.send(popular_in_women);
 });
 
-// Middleware to fetch user from token
-const fetchUser = async (req, res, next) => {
-  const token = req.header("auth-token");
-  if (!token) {
-    return res.status(401).send({ errors: "Please authenticate using valid token" });
-  }
-  try {
-    const data = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = data.user;
-    next();
-  } catch (error) {
-    res.status(401).send({ errors: "Please authenticate using a valid token" });
-  }
-};
-
-// Routes for handling cart operations
-app.post("/addtocart", fetchUser, async (req, res) => {
-  let userData = await Users.findOne({ _id: req.user.id });
-  userData.cartData[req.body.itemId] += 1;
-  await Users.findOneAndUpdate(
-    { _id: req.user.id },
-    { cartData: userData.cartData }
-  );
-  res.send("Added");
+// Route for popular in men category
+app.get("/popularinmen", async (req, res) => {
+  let products = await Product.find({ category: "men" });
+  let popular_in_men = products.slice(0, 4);
+  res.send(popular_in_men);
 });
 
-app.post("/removefromcart", fetchUser, async (req, res) => {
-  let userData = await Users.findOne({ _id: req.user.id });
-  if (userData.cartData[req.body.itemId] > 0)
-    userData.cartData[req.body.itemId] -= 1;
-  await Users.findOneAndUpdate(
-    { _id: req.user.id },
-    { cartData: userData.cartData }
-  );
-  res.send("Removed");
+// Route for popular in children category
+app.get("/popularinchildren", async (req, res) => {
+  let products = await Product.find({ category: "children" });
+  let popular_in_children = products.slice(0, 4);
+  res.send(popular_in_children);
 });
 
-app.post("/getcart", fetchUser, async (req, res) => {
-  let userData = await Users.findOne({ _id: req.user.id });
-  res.json(userData.cartData);
-});
-
-// Payment integration with Flutterwave
-app.post("/api/pay", async (req, res) => {
-  try {
-    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get("host")}`;
-    const response = await axios.post(
-      "https://api.flutterwave.com/v3/payments",
-      {
-        tx_ref: `trx_${Date.now()}`,
-        amount: req.body.amount,
-        currency: "RWF",
-        redirect_url: `${baseUrl}/payment/callback`,
-        payment_options:
-          "card,banktransfer,ussd,barter,paga,mobilemoney,bank_transfer,account,mpesa",
-        meta: {
-          consumer_id: 23,
-          consumer_mac: "92a3-912ba-1192a",
-        },
-        customer: {
-          email: req.body.email,
-          phonenumber: req.body.phonenumber,
-          name: req.body.name,
-        },
-        customizations: {
-          title: "Payment for items in cart",
-          description: "Fund of transaction",
-        },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
-        },
-      }
-    );
-
-    const paymentLink = response.data.data.link;
-    res.json({ success: true, paymentLink });
-  } catch (error) {
-    console.error("Error initiating payment:", error.response ? error.response.data : error.message);
-    res.status(500).json({ message: "Failed to initiate payment" });
-  }
-});
-
-// Start the server
-app.listen(port, (error) => {
-  if (!error) {
-    console.log("Server Running on Port " + port);
-  } else {
-    console.log("Error : " + error);
-  }
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
