@@ -16,7 +16,7 @@
 - **User registration and authentication**
 - **Browse and search for thrifted clothes**
 - **Secure payment processing using Flutterwave**
-- **Eco-friendly delivery scheduling**
+- **Admin Features**
 
 ## Technologies Used
 - **Frontend**: React.js
