@@ -43,7 +43,7 @@ Follow these steps to set up the project locally:
 git clone https://github.com/yourusername/garb-rehab.git
 cd Garb-Rehab
 ```
-2. Install Dependencies
+**2. Install Dependencies**
 Frontend
 ```bash
 cd frontend
@@ -54,7 +54,12 @@ Backend
 cd ../backend
 npm install
 ```
-Running the Application
+Admin
+```bash
+cd ../admin
+npm install
+```
+## Running the Application
 1. Set Up Environment Variables
 Create a .env file in the backend directory and add the following environment variables:
 
@@ -67,6 +72,20 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT_URI=https://yourdomain.com/auth/google/callback
 ```
+2. Starting the servers.
+   Backend
+```bash
+node ./index.js
+```
+Frontend
+```bash
+npm start
+```
+Admin
+```bash
+npm run dev
+```
+
 ## Important Note on Local Development
 Since Garb Rehab has been deployed, the application might not work perfectly in a local development environment. This is due to potential changes in URL configurations, especially for third-party integrations such as Google OAuth and Flutterwave payment processing. These services often require consistent URLs, which might differ between local and deployed environments.
 
