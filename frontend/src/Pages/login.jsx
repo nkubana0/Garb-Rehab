@@ -15,17 +15,9 @@ const Login = () => {
 
   const login = async () => {
     console.log("Login Function Executed", formData);
-    let responseData;
-    await fetch("https://garb-rehab-backend.onrender.com/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
+
+    // Mock response data for login
+    const responseData = { success: true, token: "mockToken" };
 
     if (responseData.success) {
       localStorage.setItem("auth-token", responseData.token);
@@ -37,17 +29,9 @@ const Login = () => {
 
   const signup = async () => {
     console.log("Signup Function Executed", formData);
-    let responseData;
-    await fetch("https://garb-rehab-backend.onrender.com/signup", {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
+
+    // Mock response data for signup
+    const responseData = { success: true, token: "mockToken" };
 
     if (responseData.success) {
       localStorage.setItem("auth-token", responseData.token);
