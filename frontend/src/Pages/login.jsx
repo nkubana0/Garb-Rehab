@@ -96,13 +96,13 @@ const Login = () => {
             <>
               <p className="login-signup">
                 Create An Account!{" "}
-                <span onClick={() => setState("Sign Up")}>
-                  Click Here!
-                </span>
+                <span onClick={() => setState("Sign Up")}>Click Here!</span>
               </p>
               <p className="forgot-password">
-                Forgot Password?{" "}
-                <span onClick={() => window.location.href = "/forgot-password"}>
+                Forgot Password ?{" "}
+                <span
+                  onClick={() => (window.location.href = "/forgot-password")}
+                >
                   Click Here!
                 </span>
               </p>
@@ -110,17 +110,9 @@ const Login = () => {
           ) : (
             <p className="login-login">
               Already Have An Account?{" "}
-              <span onClick={() => setState("Login")}>
-                Login Here!
-              </span>
+              <span onClick={() => setState("Login")}>Login Here!</span>
             </p>
           )}
-          <div className="agree">
-            <input type="checkbox" className="checkbox" />
-            <p>
-              By continuing, I agree to the Terms of Use and Privacy Policy.
-            </p>
-          </div>
         </div>
       </div>
     </div>

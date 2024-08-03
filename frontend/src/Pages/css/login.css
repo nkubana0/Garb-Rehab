@@ -33,7 +33,7 @@
 .login-container button {
     width: 100%;
     height: 52px;
-    color: white;
+    color: rgb(216, 215, 210);
     background: black;
     margin-top: 30px;
     border: none;
@@ -42,6 +42,11 @@
     font-weight: 500;
     cursor: pointer;
 }
+.login-container button:hover {
+    background-color: white;
+    color: rgb(220, 85, 55);
+}
+
 .login-login {
     margin-top: 20px;
     color: black;
@@ -49,6 +54,11 @@
     font-weight: 500;
 }
 .login-login span {
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+.login-signup span {
     color: white;
     font-weight: 600;
     cursor: pointer;
@@ -64,6 +74,11 @@
 }
 .agree .checkbox {
     width: 22px;
+}
+.forgot-password span {
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
 }
 @media(max-width: 800px) {
     .login-login {
