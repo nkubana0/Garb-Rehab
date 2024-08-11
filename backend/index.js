@@ -223,6 +223,11 @@ app.post("/password-reset-request", async (req, res) => {
   }
 });
 
+app.post("/getcart", fetchUser, async (req, res) => {
+  let userData = await Users.findOne({ _id: req.user.id });
+  res.json(userData.cartData);
+});
+
 // Route for resetting password
 app.post("/reset-password", async (req, res) => {
   const { email, otp, newPassword } = req.body;
