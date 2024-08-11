@@ -6,7 +6,7 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const { sendMail } = require('./email'); // Import email utility
+const { sendMail } = require('./email'); // Import the sendMail function
 const { generateOTP, verifyOTP } = require('./utils/otp'); // Import OTP utility
 
 const port = process.env.PORT || 4000;
@@ -125,8 +125,8 @@ app.get("/allproducts", async (req, res) => {
   res.send(products);
 });
 
-// Route for user signup with email verification
-app.post("/signup", async (req, res) => {
+// Example usage in a route
+app.post('/signup', async (req, res) => {
   let check = await Users.findOne({ email: req.body.email });
   if (check) {
     return res.status(400).json({
