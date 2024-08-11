@@ -158,42 +158,47 @@ app.get("/allproducts", async (req, res) => {
 
 // Signup usage in a route
 app.post('/signup', async (req, res) => {
-  let check = await Users.findOne({ email: req.body.email });
-  if (check) {
-    return res.status(400).json({
-      success: false,
-      errors: "Existing user found with the same email address",
-    });
-  }
-
-  const cart = {};
-  for (let i = 0; i < 300; i++) {
-    cart[i] = 0;
-  }
-
-  const otp = generateOTP();
-  const otpExpiration = new Date();
-  otpExpiration.setMinutes(otpExpiration.getMinutes() + 10); // OTP expires in 10 minutes
-
-  const user = new Users({
-    name: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    cartData: cart,
-    otp,
-    otpExpiration,
-  });
-
-  await user.save();
-
-  // Send email with OTP
   try {
+    // Check for existing user with the same email
+    let check = await Users.findOne({ email: req.body.email.toLowerCase() }); // Use lowercase for consistency
+    console.log("User check result:", check); // Debugging line
+
+    if (check) {
+      return res.status(400).json({
+        success: false,
+        errors: "Existing user found with the same email address",
+      });
+    }
+
+    const cart = {};
+    for (let i = 0; i < 300; i++) {
+      cart[i] = 0;
+    }
+
+    const otp = generateOTP();
+    const otpExpiration = new Date();
+    otpExpiration.setMinutes(otpExpiration.getMinutes() + 10); // OTP expires in 10 minutes
+
+    const user = new Users({
+      name: req.body.username,
+      email: req.body.email.toLowerCase(), // Save email in lowercase
+      password: req.body.password,
+      cartData: cart,
+      otp,
+      otpExpiration,
+    });
+
+    await user.save();
+
+    // Send email with OTP
     sendEmail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
     res.json({ success: true, message: "OTP sent to email. Please verify." });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to send OTP email." });
+    console.error('Error during signup:', error); // Log the error
+    res.status(500).json({ success: false, message: "Failed to process signup." });
   }
 });
+
 
 // Route for verifying OTP
 app.post("/verify", async (req, res) => {
