@@ -11,6 +11,37 @@ const { generateOTP, verifyOTP } = require('./utils/otp'); // Import OTP utility
 
 const port = process.env.PORT || 4000;
 const app = express();
+const nodemailer = require('nodemailer');
+
+// Access environment variables
+const email = process.env.EMAIL;
+const appPassword = process.env.APP_PASSWORD;
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: email,
+    pass: appPassword,
+  },
+});
+
+function sendEmail(to, subject, text, attachments = []) {
+  const mailOptions = {
+    from: email,
+    to: to,
+    subject: subject,
+    text: text,
+    attachments: attachments,
+  };
+
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}
 
 // Middleware setup
 app.use(express.json());
@@ -125,13 +156,13 @@ app.get("/allproducts", async (req, res) => {
   res.send(products);
 });
 
-// Example usage in a route
+// Signup usage in a route
 app.post('/signup', async (req, res) => {
   let check = await Users.findOne({ email: req.body.email });
   if (check) {
     return res.status(400).json({
       success: false,
-      errors: "Existing user found with same email address",
+      errors: "Existing user found with the same email address",
     });
   }
 
@@ -157,7 +188,7 @@ app.post('/signup', async (req, res) => {
 
   // Send email with OTP
   try {
-    await sendMail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
+    sendEmail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
     res.json({ success: true, message: "OTP sent to email. Please verify." });
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to send OTP email." });
