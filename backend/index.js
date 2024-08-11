@@ -223,6 +223,21 @@ app.post("/password-reset-request", async (req, res) => {
   }
 });
 
+// Middleware to fetch user from token
+const fetchUser = async (req, res, next) => {
+  const token = req.header("auth-token");
+  if (!token) {
+    return res.status(401).send({ errors: "Please authenticate using valid token" });
+  }
+  try {
+    const data = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = data.user;
+    next();
+  } catch (error) {
+    res.status(401).send({ errors: "Please authenticate using a valid token" });
+  }
+};
+
 app.post("/getcart", fetchUser, async (req, res) => {
   let userData = await Users.findOne({ _id: req.user.id });
   res.json(userData.cartData);
