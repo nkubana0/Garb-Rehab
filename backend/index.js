@@ -159,9 +159,12 @@ app.get("/allproducts", async (req, res) => {
 // Signup usage in a route
 app.post('/signup', async (req, res) => {
   try {
-    // Check for existing user with the same email
-    let check = await Users.findOne({ email: req.body.email.toLowerCase() }); // Use lowercase for consistency
-    console.log("User check result:", check); // Debugging line
+    // Convert email to lowercase for consistency
+    const email = req.body.email.toLowerCase();
+
+    // Check if a user with this email already exists
+    let check = await Users.findOne({ email });
+    console.log("User check result:", check); // Log the result of the check
 
     if (check) {
       return res.status(400).json({
@@ -181,7 +184,7 @@ app.post('/signup', async (req, res) => {
 
     const user = new Users({
       name: req.body.username,
-      email: req.body.email.toLowerCase(), // Save email in lowercase
+      email: email, // Store email in lowercase
       password: req.body.password,
       cartData: cart,
       otp,
@@ -194,11 +197,10 @@ app.post('/signup', async (req, res) => {
     sendEmail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
     res.json({ success: true, message: "OTP sent to email. Please verify." });
   } catch (error) {
-    console.error('Error during signup:', error); // Log the error
+    console.error('Error during signup:', error); // Log any errors
     res.status(500).json({ success: false, message: "Failed to process signup." });
   }
 });
-
 
 // Route for verifying OTP
 app.post("/verify", async (req, res) => {
