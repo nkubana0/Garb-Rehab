@@ -195,6 +195,31 @@ app.post("/verify-email", async (req, res) => {
   res.json({ success: true, token });
 });
 
+// Route for verifying OTP
+app.post("/verify-otp", async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+    // Find user by email
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ success: false, errors: "User not found." });
+    }
+
+    // Verify OTP
+    if (!verifyOTP(otp, user.otp, user.otpExpiration)) {
+      return res.status(400).json({ success: false, errors: "Invalid OTP." });
+    }
+
+    // OTP is valid
+    res.json({ success: true, message: "OTP verified successfully." });
+  } catch (error) {
+    console.error('Error during OTP verification:', error);
+    res.status(500).json({ success: false, errors: "Internal server error." });
+  }
+});
+
 // Route for user login
 app.post("/login", async (req, res) => {
   let user = await Users.findOne({ email: req.body.email });
