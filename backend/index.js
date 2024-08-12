@@ -224,9 +224,9 @@ app.post("/verify", async (req, res) => {
 app.post("/login", async (req, res) => {
   let user = await Users.findOne({ email: req.body.email });
   if (user && req.body.password === user.password) {
-    if (!user.verified) {
-      return res.status(401).json({ success: false, errors: "Please verify your email." });
-    }
+    //**if (!user.verified) {
+      //return res.status(401).json({ success: false, errors: "Please verify your email." });
+    //}
 
     const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET);
     res.json({ success: true, token });
