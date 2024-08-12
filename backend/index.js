@@ -8,6 +8,8 @@ const cors = require("cors");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { sendMail } = require('./email'); // Import the sendMail function
 const { generateOTP, verifyOTP } = require('./utils/otp'); // Import OTP utility
+const bcrypt = require('bcrypt');
+
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -156,7 +158,7 @@ app.get("/allproducts", async (req, res) => {
   res.send(products);
 });
 
-// Signup usage in a route
+//route for signup
 app.post('/signup', async (req, res) => {
   try {
     // Convert email to lowercase for consistency
@@ -178,14 +180,17 @@ app.post('/signup', async (req, res) => {
       cart[i] = 0;
     }
 
-    const otp = generateOTP();
+    const otp = generateOTP(); // Assuming you have a generateOTP function
     const otpExpiration = new Date();
     otpExpiration.setMinutes(otpExpiration.getMinutes() + 10); // OTP expires in 10 minutes
+
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const user = new Users({
       name: req.body.username,
       email: email, // Store email in lowercase
-      password: req.body.password,
+      password: hashedPassword, // Save the hashed password
       cartData: cart,
       otp,
       otpExpiration,
@@ -194,7 +199,7 @@ app.post('/signup', async (req, res) => {
     await user.save();
 
     // Send email with OTP
-    sendEmail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
+    await sendEmail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
     res.json({ success: true, message: "OTP sent to email. Please verify." });
   } catch (error) {
     console.error('Error during signup:', error); // Log any errors
@@ -203,7 +208,7 @@ app.post('/signup', async (req, res) => {
 });
 
 // Route for verifying OTP
-app.post("/verify", async (req, res) => {
+app.post("/verify-email", async (req, res) => {
   const { email, otp } = req.body;
   const user = await Users.findOne({ email });
 
