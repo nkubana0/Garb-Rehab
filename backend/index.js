@@ -6,8 +6,9 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const { sendMail } = require('./email'); // Import the sendMail function
+const { sendEmail } = require('./email'); // Import the sendEmail function
 const { generateOTP, verifyOTP } = require('./utils/otp'); // Import OTP utility
+
 
 
 const port = process.env.PORT || 4000;
@@ -25,24 +26,6 @@ const transporter = nodemailer.createTransport({
     pass: appPassword,
   },
 });
-
-function sendEmail(to, subject, text, attachments = []) {
-  const mailOptions = {
-    from: email,
-    to: to,
-    subject: subject,
-    text: text,
-    attachments: attachments,
-  };
-
-  transporter.sendMail(mailOptions, function(error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
-  });
-}
 
 // Middleware setup
 app.use(express.json());
@@ -160,12 +143,8 @@ app.get("/allproducts", async (req, res) => {
 // Signup usage in a route
 app.post('/signup', async (req, res) => {
   try {
-    // Convert email to lowercase for consistency
     const email = req.body.email.toLowerCase();
-
-    // Check if a user with this email already exists
     let check = await Users.findOne({ email });
-    console.log("User check result:", check); // Log the result of the check
 
     if (check) {
       return res.status(400).json({
@@ -174,20 +153,14 @@ app.post('/signup', async (req, res) => {
       });
     }
 
-    const cart = {};
-    for (let i = 0; i < 300; i++) {
-      cart[i] = 0;
-    }
-
     const otp = generateOTP();
     const otpExpiration = new Date();
     otpExpiration.setMinutes(otpExpiration.getMinutes() + 10); // OTP expires in 10 minutes
 
     const user = new Users({
       name: req.body.username,
-      email: email, // Store email in lowercase
+      email: email,
       password: req.body.password,
-      cartData: cart,
       otp,
       otpExpiration,
     });
@@ -198,7 +171,7 @@ app.post('/signup', async (req, res) => {
     sendEmail(req.body.email, "Verify Your Email", `Your OTP is: ${otp}`);
     res.json({ success: true, message: "OTP sent to email. Please verify." });
   } catch (error) {
-    console.error('Error during signup:', error); // Log any errors
+    console.error('Error during signup:', error);
     res.status(500).json({ success: false, message: "Failed to process signup." });
   }
 });
@@ -256,7 +229,7 @@ app.post("/password-reset-request", async (req, res) => {
 
   // Send email with OTP for password reset
   try {
-    await sendMail(email, "Password Reset Request", `Your OTP is: ${otp}`);
+    await sendEmail(email, "Password Reset Request", `Your OTP is: ${otp}`);
     res.json({ success: true, message: "OTP sent to email." });
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to send OTP email." });

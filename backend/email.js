@@ -1,42 +1,31 @@
 const nodemailer = require('nodemailer');
-const { google } = require('googleapis');
+require('dotenv').config();
 
-const oAuth2Client = new google.auth.OAuth2(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  process.env.REDIRECT_URI
-);
 
-oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
+const transporter = nodemailer.createTransport({
+  host: process.env.MAILGUN_SMTP_HOST,
+  port: process.env.MAILGUN_SMTP_PORT,
+  auth: {
+    user: process.env.MAILGUN_SMTP_USER,
+    pass: process.env.MAILGUN_SMTP_PASS,
+  },
+});
 
-async function sendMail(to, subject, text) {
-  try {
-    const accessToken = await oAuth2Client.getAccessToken();
+function sendEmail(to, subject, text) {
+  const mailOptions = {
+    from: process.env.MAILGUN_SMTP_USER,
+    to: to,
+    subject: subject,
+    text: text,
+  };
 
-    const transport = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: process.env.EMAIL_USER,
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        refreshToken: process.env.REFRESH_TOKEN,
-        accessToken: accessToken.token,
-      },
-    });
-
-    const mailOptions = {
-      from: `Garb Rehab <${process.env.EMAIL_USER}>`,
-      to: to,
-      subject: subject,
-      text: text,
-    };
-
-    await transport.sendMail(mailOptions);
-  } catch (error) {
-    console.error('Error sending email:', error);
-    throw new Error('Failed to send email');
-  }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email:', error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
 }
 
-module.exports = { sendMail };
+module.exports = { sendEmail };
