@@ -5,6 +5,12 @@ const VerifyOTPAndResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
 
   const resetPassword = async () => {
+    // Add basic validation
+    if (!otp || !newPassword) {
+      alert("Please fill in both OTP and new password.");
+      return;
+    }
+  
     try {
       const response = await fetch("https://garb-rehab-backend.onrender.com/reset-password", {
         method: "POST",
@@ -13,13 +19,13 @@ const VerifyOTPAndResetPassword = () => {
         },
         body: JSON.stringify({ otp, newPassword }),
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
+  
       const responseData = await response.json();
-
+  
       if (responseData.success) {
         alert("Password has been reset successfully.");
         window.location.replace("/login");

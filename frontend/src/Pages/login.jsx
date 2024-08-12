@@ -15,30 +15,61 @@ const Login = () => {
 
   const login = async () => {
     console.log("Login Function Executed", formData);
+    try {
+      const response = await fetch("https://garb-rehab-backend.onrender.com/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-    // Mock response data for login
-    const responseData = { success: true, token: "mockToken" };
+      const responseData = await response.json();
 
-    if (responseData.success) {
-      localStorage.setItem("auth-token", responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData.errors);
+      if (responseData.success) {
+        localStorage.setItem("auth-token", responseData.token);
+        window.location.replace("/");
+      } else {
+        alert(responseData.errors);
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+      alert("An error occurred during login. Please try again.");
     }
   };
 
   const signup = async () => {
     console.log("Signup Function Executed", formData);
+    try {
+      const response = await fetch("https://garb-rehab-backend.onrender.com/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-    // Mock response data for signup
-    const responseData = { success: true, token: "mockToken" };
+      const responseData = await response.json();
 
-    if (responseData.success) {
-      localStorage.setItem("auth-token", responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData.errors);
+      if (responseData.success) {
+        localStorage.setItem("auth-token", responseData.token);
+        localStorage.setItem("signup-email", formData.email);
+        window.location.replace("/verify-email");
+      } else {
+        alert(responseData.errors);
+      }
+    } catch (error) {
+      console.error("Error signing up:", error);
+      alert("An error occurred during signup. Please try again.");
     }
+  
   };
 
   return (
@@ -83,7 +114,7 @@ const Login = () => {
                 <span onClick={() => setState("Sign Up")}>Click Here!</span>
               </p>
               <p className="forgot-password">
-                Forgot Password ?{" "}
+                Forgot Password?{" "}
                 <span
                   onClick={() => (window.location.href = "/forgot-password")}
                 >

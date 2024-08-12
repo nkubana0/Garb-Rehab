@@ -12,6 +12,7 @@ import Footer from "./Components/footer/footer";
 import men_banner from "./Components/Assets/banner_mens.png";
 import women_banner from "./Components/Assets/banner_women.png";
 import kids_banner from "./Components/Assets/banner_kids.png";
+import VerifyEmail from "./Pages/verify";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/auth/callback" element={<AuthCallback />} /> 
+          <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
         <Footer />
       </BrowserRouter>
